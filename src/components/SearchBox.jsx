@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 
 const SearchBox = ({ placeholder, buttonText, onSubmit }) => {
-  const [text, setText] = useState('');
+  const inputRef = useRef();
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [inputRef]);
 
   return (
     <Container>
-      <Input 
+      <Input
+        ref={inputRef}
         type="text"
         placeholder={placeholder}
-        value={text}
-        onChange={event => setText(event.target.value)}
+        value={query}
+        onChange={event => setQuery(event.target.value)}
       />
-      <Button onClick={() => onSubmit(text)}>
+      <Button onClick={() => onSubmit(query)}>
         {buttonText}
       </Button>
     </Container>
@@ -21,6 +27,7 @@ const SearchBox = ({ placeholder, buttonText, onSubmit }) => {
 };
 
 const Container = styled.div`
+  align-self: center;
   margin-bottom: 5%;
 `
 const Input = styled.input`

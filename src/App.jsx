@@ -1,32 +1,62 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
+import ReactPaginate from 'react-paginate';
 import axios from 'axios';
+
 import SearchBox from  './components/SearchBox';
 import CardList from './components/CardList';
-import { useEffect, useState } from 'react';
+
+const ITEM_PER_PAGE = 50;
 
 const App = () => {
-  const [items, setItems] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const fetchRepos = () => {
-    console.log("fetched")
-    axios
-    .get('repository.json')
-    .then(res => {
-      const items = res.data.items;
-      setItems(items);
-    })
-    .catch(console.err)
-  }
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetchRepos();
-  }, []);
+    const fetchRepositories = () => {
+      const endpoint = `https://api.github.com/search/repositories`;
 
+      setLoading(true);
+      axios.get(`${endpoint}?q=${name} in:name&page=${currentPage}&per_page=${ITEM_PER_PAGE}`)
+      .then(res => {
+        const { total_count, items } = res.data;
+        setPageCount(Math.ceil(total_count / items.length));
+        setItems(items);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.err(err);
+        setError(true);
+        setLoading(false);
+      })
+    }
+
+    if(name && currentPage) {
+      fetchRepositories();
+    }
+  }, [name, currentPage]);
+  
   return (
     <Container>
-      <SearchBox placeholder="Search Repository" buttonText="Search" onSubmit={() => console.log("Clicked!")} />
-      <CardList items={items}  />
+      <SearchBox placeholder="Search Repository" buttonText="Search" onSubmit={setName} />
+      {!loading && items && items.length > 0 &&
+        <>
+          <CardList items={items} />
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={(event) => setCurrentPage(event.selected)}
+            pageRangeDisplayed={5}
+            pageCount={pageCount}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null} />
+        </>
+      }
     </Container>
   );
 }
@@ -34,11 +64,7 @@ const App = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   margin: 5%;
 `
 
 export default App;
-
- /* https://api.github.com/search/repositories?q=i+in%3Aname+user%3Ai2ii */

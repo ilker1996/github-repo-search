@@ -7,18 +7,20 @@ const Card = ({ item }) => {
     title,
     description,
     language,
-    owner,
-    avatar,
     link,
+    owner,
+    owner_avatar,
+    owner_link,
     updated_at,
     star_count
   } = {
     title: item.name,
     description: item.description,
     language: item.language,
-    owner: item.owner.login,
-    avatar: item.owner.avatar_url,
     link: item.html_url,
+    owner: item.owner.login,
+    owner_avatar: item.owner.avatar_url,
+    owner_link: item.owner.html_url,
     updated_at: item.updated_at,
     star_count: item.stargazers_count,
   }
@@ -26,13 +28,15 @@ const Card = ({ item }) => {
   return (
     <Container>
       <OwnerInfo>
-        <a href={link}>
-          <Avatar src={avatar}/>
+        <a href={owner_link}>
+          <Avatar src={owner_avatar}/>
         </a>
         <Title>{owner}</Title>
       </OwnerInfo>
       <RepositoryInfo>
-        <Title>{title}</Title>
+        <a href={link}>
+          <Title>{title}</Title>
+        </a>
         <Description>{description}</Description>
         <Star>{star_count}</Star>
         <Language>{language}</Language>
@@ -45,8 +49,6 @@ const Card = ({ item }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  flex: 1;
-  flex-basis: 15%;
   border: solid 2px #3a3a3a;
   border-radius: 5px;
 `

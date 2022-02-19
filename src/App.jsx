@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 import Pagination from './components/Pagination';
 import SearchBox from  './components/SearchBox';
 import CardList from './components/CardList';
+import { fetchRepositories } from './service/api';
 
 const ITEM_PER_PAGE = 30;
 
@@ -14,29 +14,33 @@ const App = () => {
 
   const [repoName, setRepoName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const fetchRepositories = () => {
-      setLoading(true);
-      const endpoint = `https://api.github.com/search/repositories`;
-      axios.get(`${endpoint}?q=${repoName} in:name&page=${currentPage}&per_page=${ITEM_PER_PAGE}`)
-      .then(res => {
-        const { total_count, items } = res.data;
-        setPageLimit(Math.ceil(total_count / ITEM_PER_PAGE));
-        setItems(items);
+    const fetch = async () => {
+      try {
+        const response = await fetchRepositories(repoName, currentPage, ITEM_PER_PAGE);
+        console.log(response);
+        if(response.status === 200) {
+          const { total_count, items } = response.data;
+          setPageLimit(Math.ceil(total_count / ITEM_PER_PAGE));
+          setItems(items);
+          setMessage(`${items.length} results found`);
+          setLoading(false);
+          console.log(!loading && !error);
+          console.log(items && items.length > 0);
+        }
+      } catch (error) {
+        console.log(error.message);
+        setError('Something went wrong! Try again');
         setLoading(false);
-      })
-      .catch(err => {
-        console.err(err);
-        setError(true);
-        setLoading(false);
-      })
-    }
+      }
+    };
 
     if(repoName && currentPage) {
-      fetchRepositories();
+      fetch();
     }
   }, [repoName, currentPage]);
   
@@ -54,26 +58,23 @@ const App = () => {
   }, [currentPage]);
 
   const changePage = useCallback((number) => {
-    console.log(number);
-    console.log(pageLimit);
     if(number > 0 && number <= pageLimit) {
       setCurrentPage(number);
     }
   }, [pageLimit]);
 
-  if(error) {
-    return <h1>Something went wrong! Try again</h1>
-  }
-
   return (
     <Container>
-      <SearchBox 
+      <SearchBox
+        loading={loading}
         containerStyle={styles.searchbox}
         placeholder="Search Repository"
         buttonText="Search"
         onSubmit={setRepoName}
       />
-      {!loading && items && items.length > 0 &&
+      {error && <Error>{error}</Error>}
+      {!loading && !error && message && <Message>{message}</Message>}
+      {!loading && !error && items && items.length > 0 &&
         <>
           <CardList items={items}/>
           <Pagination
@@ -85,7 +86,7 @@ const App = () => {
             goToPreviousPage={goToPreviousPage}
             changePage={changePage}
           />
-        </>
+        </>   
       }
     </Container>
   );
@@ -94,16 +95,32 @@ const App = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 5%;
+  padding: 5%;
 `
-
+const Error = styled.h1`
+  align-self: center;
+  text-align: center;
+  font-family: Verdana, sans-serif;
+  font-size: 25px;
+  letter-spacing: 2px;
+`
+const Message = styled.p`
+  align-self: center;
+  text-align: center;
+  color: rgba(0, 0, 0, .8);
+  font-family: Verdana, sans-serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+  font-weight: 500;
+  margin-bottom: 20px;
+`
 const styles = {
   searchbox: {
-    marginBottom: '5%',
+    marginBottom: '10px',
   },
   pagination: {
-    marginTop: '5%',
-    marginBottom: '5%',
+    marginTop: '30px',
+    marginBottom: '30px',
   }
 }
 

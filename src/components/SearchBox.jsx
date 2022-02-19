@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import styled from 'styled-components';
+import { Audio } from  'react-loader-spinner'
 
-const SearchBox = ({ placeholder, buttonText, onSubmit, containerStyle }) => {
+const SearchBox = ({ loading, placeholder, buttonText, onSubmit, containerStyle }) => {
   const inputRef = useRef();
   const [query, setQuery] = useState('');
 
@@ -12,13 +12,19 @@ const SearchBox = ({ placeholder, buttonText, onSubmit, containerStyle }) => {
 
   return (
     <Container style={containerStyle}>
-      <Input
-        ref={inputRef}
-        type="text"
-        placeholder={placeholder}
-        value={query}
-        onChange={event => setQuery(event.target.value)}
-      />
+      <Span>
+        {loading ? 
+          <Audio height="25" width="25" color='#689FF0'/> 
+          : <div style={{ width: 25, height: 25 }}  /> // Placeholder
+        }
+        <Input
+          ref={inputRef}
+          type="text"
+          placeholder={placeholder}
+          value={query}
+          onChange={event => setQuery(event.target.value)}
+        />
+      </Span>
       <Button onClick={() => {
         if(query) {
           onSubmit(query);
@@ -32,25 +38,38 @@ const SearchBox = ({ placeholder, buttonText, onSubmit, containerStyle }) => {
 
 const Container = styled.div`
   align-self: center;
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+`
+const Span = styled.span`
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  border: solid 3px #689FF0;
+  border-radius: 10px;
+  padding: 10px;
+  margin-right: 20px;
 `
 const Input = styled.input`
-  padding: 10px 20px;
-  border: solid 2px #686868;
-  border-radius: 5px;
-  margin-right: 5px;
+  border:none;
   outline: none;
-  &:focus {
-    border-color: #005ad8;
-    transition: 0.5s;
-  }
+  color: black;
+  font-family: Verdana, American Typewriter, serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  margin-left: 10px;
+  width: 100%;
 `
 const Button = styled.button`
-  padding: 10px 20px;
-  border: solid 2px #005ad8;
+  background-color: #689FF0;
   border-radius: 5px;
-  background-color: #005ad8;
-  color: white;
-  outline: none;
+  padding: 10px 20px;
+  color: #FFFEFD;
+  font-family: Verdana, American Typewriter, serif;
+  font-size: 15px;
+  letter-spacing: 1px;
   cursor: pointer;
 `
 

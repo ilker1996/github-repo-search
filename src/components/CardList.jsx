@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Card from './Card';
 
 const CardList = ({ items }) => {
-  if(!items || items.length <= 0 ) {
+  if(!items) {
     return null;
   }
 

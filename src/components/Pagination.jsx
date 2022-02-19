@@ -1,11 +1,16 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const Pagination = ({ containerStyle, currentPage, pageLimit, pageRange, goToPreviousPage, goToNextPage, changePage}) => {
-  const getPaginationGroup = useCallback(() => {
+  if(currentPage <= 0) {
+    return null;
+  }
+  
+  
+  const getPaginationGroup = () => {
     const start = Math.floor((currentPage - 1) / pageRange) * pageRange;
     return new Array(pageRange).fill().map((_, idx) => start + idx + 1);
-  }, [currentPage, pageRange]);
+  };
 
   return (
     <Container style={containerStyle}>
@@ -23,7 +28,7 @@ const Pagination = ({ containerStyle, currentPage, pageLimit, pageRange, goToPre
             changePage(number);
           }}
         >
-          <Span>{item}</Span>
+          {item}
         </MiddleButton>
       ))}
 
@@ -55,8 +60,10 @@ const Button = styled.button`
   `}
 `
 const MiddleButton = styled.button`
+  align-items: center;
+  justify-content: center;
   background: #ffffff;
-  border: 2px solid #666;
+  border: 2px dashed #666;
   padding: 10px 15px;
   border-radius: 50%;
   height: 45px;
@@ -69,12 +76,6 @@ const MiddleButton = styled.button`
     color: #888;
     pointer-events: none;
   `}
-`
-const Span = styled.span`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 `
 
 export default React.memo(Pagination);

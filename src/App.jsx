@@ -1,31 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import ReactPaginate from 'react-paginate';
 import axios from 'axios';
 
+import Pagination from './components/Pagination';
 import SearchBox from  './components/SearchBox';
 import CardList from './components/CardList';
 
-const ITEM_PER_PAGE = 50;
+const ITEM_PER_PAGE = 30;
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageCount, setPageCount] = useState(1);
-  const [name, setName] = useState('');
+  const [pageLimit, setPageLimit] = useState(1);
+
+  const [repoName, setRepoName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
   const [items, setItems] = useState([]);
 
   useEffect(() => {
     const fetchRepositories = () => {
-      const endpoint = `https://api.github.com/search/repositories`;
-
       setLoading(true);
-      axios.get(`${endpoint}?q=${name} in:name&page=${currentPage}&per_page=${ITEM_PER_PAGE}`)
+      const endpoint = `https://api.github.com/search/repositories`;
+      axios.get(`${endpoint}?q=${repoName} in:name&page=${currentPage}&per_page=${ITEM_PER_PAGE}`)
       .then(res => {
         const { total_count, items } = res.data;
-        setPageCount(Math.ceil(total_count / items.length));
+        setPageLimit(Math.ceil(total_count / ITEM_PER_PAGE));
         setItems(items);
         setLoading(false);
       })
@@ -36,25 +35,56 @@ const App = () => {
       })
     }
 
-    if(name && currentPage) {
+    if(repoName && currentPage) {
       fetchRepositories();
     }
-  }, [name, currentPage]);
+  }, [repoName, currentPage]);
   
+
+  const goToNextPage = useCallback(() => {
+    if(currentPage < pageLimit) {
+      setCurrentPage(currentPage + 1);
+    }
+  }, [currentPage, pageLimit]);
+
+  const goToPreviousPage = useCallback(() => {
+    if(currentPage > 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }, [currentPage]);
+
+  const changePage = useCallback((number) => {
+    console.log(number);
+    console.log(pageLimit);
+    if(number > 0 && number <= pageLimit) {
+      setCurrentPage(number);
+    }
+  }, [pageLimit]);
+
+  if(error) {
+    return <h1>Something went wrong! Try again</h1>
+  }
+
   return (
     <Container>
-      <SearchBox placeholder="Search Repository" buttonText="Search" onSubmit={setName} />
+      <SearchBox 
+        containerStyle={styles.searchbox}
+        placeholder="Search Repository"
+        buttonText="Search"
+        onSubmit={setRepoName}
+      />
       {!loading && items && items.length > 0 &&
         <>
-          <CardList items={items} />
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel="next >"
-            onPageChange={(event) => setCurrentPage(event.selected)}
-            pageRangeDisplayed={5}
-            pageCount={pageCount}
-            previousLabel="< previous"
-            renderOnZeroPageCount={null} />
+          <CardList items={items}/>
+          <Pagination
+            containerStyle={styles.pagination}
+            currentPage={currentPage}
+            pageRange={5}
+            pageLimit={pageLimit}
+            goToNextPage={goToNextPage}
+            goToPreviousPage={goToPreviousPage}
+            changePage={changePage}
+          />
         </>
       }
     </Container>
@@ -66,5 +96,15 @@ const Container = styled.div`
   flex-direction: column;
   margin: 5%;
 `
+
+const styles = {
+  searchbox: {
+    marginBottom: '5%',
+  },
+  pagination: {
+    marginTop: '5%',
+    marginBottom: '5%',
+  }
+}
 
 export default App;

@@ -9,16 +9,23 @@ import { fetchRepositories } from './service/api';
 const ITEM_PER_PAGE = 30; // Number of items to show on each page
 const ITEM_LIMIT = 1000; // The limit defined by the GitHub API
 
+/**
+ * Main component of the app
+ * @component
+ */
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageLimit, setPageLimit] = useState(1);
 
-  const [repoName, setRepoName] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [items, setItems] = useState([]);
+  const [repoName, setRepoName] = useState(''); // Queried repo name
+  const [loading, setLoading] = useState(false); // Loading state of the search
+  const [error, setError] = useState(null); // Resulting error
+  const [message, setMessage] = useState(null); // Resulting message of the search
+  const [items, setItems] = useState([]); // Resulting array after searching
 
+  /**
+  * Scrolls to the top of the window
+  */
   const scrollToTop = () => window.scrollTo({top: 0});
 
   useEffect(() => {
@@ -30,7 +37,7 @@ const App = () => {
             const { total_count, items } = response.data;
   
             const pageCount = Math.ceil(total_count / ITEM_PER_PAGE); // Page count in total
-            const pageLimit = Math.ceil(ITEM_LIMIT / ITEM_PER_PAGE); // the page limit for the API
+            const pageLimit = Math.ceil(ITEM_LIMIT / ITEM_PER_PAGE); // The page limit for the API
             setPageLimit(Math.min(pageCount, pageLimit));
   
             setItems(items);
@@ -57,19 +64,30 @@ const App = () => {
     }
   }, [repoName, currentPage]);
   
-
+  /**
+   * Memoized function for changing the item page to next one
+   */
   const goToNextPage = useCallback(() => {
     if(currentPage < pageLimit) {
       setCurrentPage(currentPage + 1);
     }
   }, [currentPage, pageLimit]);
 
+
+  /**
+   * Memoized function for changing the item page to previous one
+   */
   const goToPreviousPage = useCallback(() => {
     if(currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   }, [currentPage]);
 
+
+  /**
+   * Memoized function for changing the item page
+   * @param {string} number Target page number
+   */
   const changePage = useCallback((number) => {
     if(number > 0 && number <= pageLimit) {
       setCurrentPage(number);

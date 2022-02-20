@@ -2,6 +2,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Audio } from  'react-loader-spinner'
 
+/**
+ * Component for typing the search query in the input box 
+ *        and submitting it
+ * @component
+ * @example
+ * return (
+ *   <SearchBox
+ *     loading={true}
+ *     containerStyle={{backgroundColor: black}}
+ *     placeholder="Search Repository"
+ *     buttonText="Search"
+ *     onSubmit={(name) => {
+ *        Do some operations with submitted query
+ *       }
+ *     }
+ *   />
+ * );
+ */
 const SearchBox = ({ loading, placeholder, buttonText, onSubmit, containerStyle }) => {
   const inputRef = useRef();
   const [query, setQuery] = useState('');

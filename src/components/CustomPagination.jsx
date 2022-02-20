@@ -3,11 +3,38 @@ import styled from 'styled-components';
 
 const DOTS = ".....";
 
+/**
+ * Component for pagination of some items
+ * @component
+ * @example
+ * const [currentPage, setCurrentPage] = useState(1);
+ * const goToNextPage = () => setCurrentPage(currentPage + 1);
+ * const goToPreviousPage = () => setCurrentPage(currentPage - 1);
+ * const changePage = (number) => setCurrentPage(number);
+ * return (
+ *    <CustomPagination
+ *       containerStyle={{marginBottom: 5px}}
+ *       currentPage={currentPage}
+ *       pageRange={5}
+ *       pageLimit={30}
+ *       goToNextPage={goToNextPage}
+ *       goToPreviousPage={goToPreviousPage}
+ *       changePage={changePage}
+ *    />
+ * );
+ */
 const CustomPagination = ({ containerStyle, currentPage, pageLimit, pageRange, goToPreviousPage, goToNextPage, changePage}) => {
   if(currentPage <= 0 || pageLimit <= 1) {
     return null;
   }
   
+  /**
+   * Fetching the repositories with given parameters using `axios` library
+   * @param {string} repoName Searched repository name
+   * @param {number} page Page number of the items
+   * @param {number} itemPerPage Number of items displayed per page
+   * @return {Promise} Promise for the API response
+   */
   const getPaginationGroup = () => {
     const range = pageRange < pageLimit ? pageRange : pageLimit;
     const start = Math.floor((currentPage - 1) / range) * range;
@@ -29,6 +56,13 @@ const CustomPagination = ({ containerStyle, currentPage, pageLimit, pageRange, g
     return group;
   };
 
+  /**
+   * Fetching the repositories with given parameters using `axios` library
+   * @param {string} repoName Searched repository name
+   * @param {number} page Page number of the items
+   * @param {number} itemPerPage Number of items displayed per page
+   * @return {Promise} Promise for the API response
+   */
   const renderItem = (item, index) => {
     if(item === DOTS) {
       return <Dots key={index}>{item}</Dots>

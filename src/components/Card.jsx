@@ -4,6 +4,26 @@ import ReactTimeago from 'react-timeago';
 
 import {stringToRGB} from '../service/utils.js';
 
+/**
+ * Component for showing details of the repository.
+ *
+ * @component
+ * @example
+ * const item = {
+ *  name : "github-search",
+ *  description: "Search GitHub repositories",
+ *  language: "Javascript",
+ *  html_url: "https://github.com/ilker1996/github-search",
+ *  updated_at: "2022-02-20T06:16:09Z",
+ *  owner: {
+ *    login: "ilker1996",
+ *    avatar_url: "https://avatars.githubusercontent.com/u/84990219?v=4",
+ *  }
+ * }
+ * return (
+ *   <Card item={item} />
+ * );
+ */
 const Card = ({ item }) => {
   const {
     title,

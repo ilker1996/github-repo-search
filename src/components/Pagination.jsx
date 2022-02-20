@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Pagination = ({ containerStyle, currentPage, pageLimit, pageRange, goToPreviousPage, goToNextPage, changePage}) => {
-  if(currentPage <= 0) {
+  if(currentPage <= 0 || pageLimit <= 1) {
     return null;
   }
   
@@ -46,13 +46,19 @@ const Container = styled.div`
   justify-content: center;
 `
 const Button = styled.button`
-  background: #fff;
-  border: none;
+  background-color: #ffffff;
+  border-radius: 15px;
   padding: 10px;
-  color: blue;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  color: #689FF0;
+  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.4);
   margin: 0 10px;
   cursor: pointer;
+  &:hover {
+    background-color: #689FF0;
+    color: #ffffff;
+    transition-duration: .5s;
+    transform: scale(1.2);
+  }
   ${({ disabled }) => disabled && `
     pointer-events: none;
     box-shadow: none;
@@ -62,8 +68,9 @@ const Button = styled.button`
 const MiddleButton = styled.button`
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  border: 2px dashed #666;
+  color: #689FF0;
+  background-color: #ffffff;
+  border: 2px dashed #666666;
   padding: 10px 15px;
   border-radius: 50%;
   height: 45px;
@@ -71,6 +78,12 @@ const MiddleButton = styled.button`
   position: relative;
   margin: 0 5px;
   cursor: pointer;
+  &:hover {
+    background-color: #689FF0;
+    color: #ffffff;
+    transition-duration: .5s;
+    transform: scale(1.2);
+  }
   ${({ active }) => active && `
     border: 1px solid #888;
     color: #888;

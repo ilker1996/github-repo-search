@@ -21,16 +21,17 @@ const App = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
+        setLoading(true);
         const response = await fetchRepositories(repoName, currentPage, ITEM_PER_PAGE);
-        console.log(response);
         if(response.status === 200) {
           const { total_count, items } = response.data;
           setPageLimit(Math.ceil(total_count / ITEM_PER_PAGE));
           setItems(items);
-          setMessage(`${items.length} results found`);
+          setMessage(`${total_count} results found`);
           setLoading(false);
-          console.log(!loading && !error);
-          console.log(items && items.length > 0);
+        } else {
+          setError('Something went wrong! Try again');
+          setLoading(false);
         }
       } catch (error) {
         console.log(error.message);
@@ -70,7 +71,13 @@ const App = () => {
         containerStyle={styles.searchbox}
         placeholder="Search Repository"
         buttonText="Search"
-        onSubmit={setRepoName}
+        onSubmit={(name) => {
+            // Reset page number
+            setCurrentPage(1);
+            // Set searched repository name
+            setRepoName(name);
+          }
+        }
       />
       {error && <Error>{error}</Error>}
       {!loading && !error && message && <Message>{message}</Message>}
@@ -93,6 +100,7 @@ const App = () => {
 }
 
 const Container = styled.div`
+  background-color: #F4E8D2;
   display: flex;
   flex-direction: column;
   padding: 5%;

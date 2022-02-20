@@ -43,6 +43,7 @@ const Container = styled.div`
   width: 80%;
 `
 const Span = styled.span`
+  background-color: white;
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -54,7 +55,7 @@ const Span = styled.span`
 const Input = styled.input`
   border:none;
   outline: none;
-  color: black;
+  color: rgba(0, 0, 0, 1);
   font-family: Verdana, American Typewriter, serif;
   font-size: 22px;
   letter-spacing: 2px;

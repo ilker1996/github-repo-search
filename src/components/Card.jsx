@@ -48,26 +48,23 @@ const Card = ({ item }) => {
         </Link>
         <Description>{description}</Description>
         <Byline>
-          {language && 
-            <Language>
-              <Circle style={{backgroundColor: stringToRGB(language)}} />
-              {language}
-            </Language>
-          }
+          <Language>
+            <Circle style={language && {backgroundColor: stringToRGB(language)}} />
+            {language}
+          </Language>
           {updated_at && 
             <Time>
               <ReactTimeago date={updated_at} />
             </Time>
           }
         </Byline>
-  
       </RepositoryInfo>
     </Container>
   )
 }
 
 const Container = styled.div`
-  background-image: linear-gradient(to bottom, #F4E8D2 , #FFFFFF);
+  background-image: linear-gradient(to bottom, #eab65b , #FFFFFF);
   display: flex;
   flex-direction: row;
   border: solid 4px #3a3a3a;
@@ -75,7 +72,7 @@ const Container = styled.div`
   padding: 10px;
   margin-bottom: 20px;
   &:hover {
-    background-image: linear-gradient(to top, #F4E8D2 , #FFFFFF);
+    background-image: linear-gradient(to top, #eab65b , #FFFFFF);
     transition-duration: .5s;
     transform: scale(1.1, 1.1);
   }
@@ -86,7 +83,6 @@ const OwnerInfo = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 20%;
-  margin-right: 20px;
 `
 const OwnerName = styled.h1`
   color: rgba(0, 0, 0, .7);
@@ -102,9 +98,9 @@ const OwnerName = styled.h1`
 const RepositoryInfo = styled.div`
   flex: 1;
   display: flex;
+  width: 70%;
   flex-direction: column;
-  margin-left: 20px;
-  margin-right: 10px;
+  margin-left: 10px;
 `
 const Link = styled.a`
   flex: 1;
@@ -143,6 +139,9 @@ const Title = styled.h1`
   font-size: 22px;
   letter-spacing: 3px;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 const Description = styled.h2`
   flex: 1;
@@ -159,7 +158,6 @@ const Byline = styled.span`
   justify-content: space-between;
 `
 const Circle = styled.div`
-  background-color: red;
   height: 15px;
   width: 15px;
   margin-right: 10px;
@@ -183,6 +181,7 @@ const Time = styled.p`
   font-size: 12px;
   letter-spacing: 2px;
   font-weight: 600;
+  
 `
 
 const Avatar = styled.img`

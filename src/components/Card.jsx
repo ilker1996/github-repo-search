@@ -2,20 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ReactTimeago from 'react-timeago';
 
-function stringToRGB(str) {
-  if(!str) {
-    return "#FFFFFF";
-  }
-
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 1) + hash * 16);
-  }
-
-  const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
-
-  return "#" + "000000".substring(0, 6 - c.length) + c
-} 
+import {stringToRGB} from '../service/utils.js';
 
 const Card = ({ item }) => {
   const {

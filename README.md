@@ -6,9 +6,13 @@ You can search any repository by its name in this web application
 
 # How to run
 
-Run below commands in order after installing apropriate [Node](https://nodejs.org/en/) version<br>
-`npm install`<br>
-`npm start`
+- Install [Git](https://git-scm.com/downloads) and clone the repository<br>
+  `git clone https://github.com/ilker1996/github-search.git`<br>
+  `cd github-search`<br>
+
+- Run below commands in order after installing apropriate [Node](https://nodejs.org/en/) version<br>
+  `npm install`<br>
+  `npm start`
 
 Now, you can see the web application on your browser at address : [http://localhost:3000](http://localhost:3000)
 

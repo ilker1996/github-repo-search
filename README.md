@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# Getting Started with GitHub Search
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is developed for exercise purposes<br>
+It uses [GitHub Rest API](https://docs.github.com/en/rest) to search GitHub repositories<br>
+You can search any repository by its name in this web application
 
-## Available Scripts
+# How to run
 
-In the project directory, you can run:
+Run below commands in order after installing apropriate [Node](https://nodejs.org/en/) version<br>
+`npm install`<br>
+`npm start`
 
-### `npm start`
+Now, you can see the web application on your browser at address : [http://localhost:3000](http://localhost:3000)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# How to run tests
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+No tests are written
 
-### `npm test`
+# Future improvements
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Pagination item can be implemented in a more sophisticated way
+- Adding more parameters to the API request header for better performance
+- Using GraphQL API of the GitHub for faster and lightweight responses instead of REST
+- Implementing caching mechanism for better performance and not exceeding the rate limit of the API
+- Using more sophisticated search bar without search button (it may search as you typed query)
+- Adding more filter for repository details (user, language, update time, star count)
+- Reducing request number by reading maximum items at once and splitting it while showing to the user
+- Authentication token can be added for increasing the API rate limit
+- Database integration can be handled for preventing API request so often
 
-### `npm run build`
+# Feedback about the exercise
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Pros
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Not giving any design details makes you free and force to think about design decisions during development
+- It is a really fun development process.
+- It is a broadscale exercise. There are a lot of concepts to think from data flow to user experience
+- It is better than short coding tasks with obvious solutions to understand the developer's perspective
+- It is great to use 3rd party libraries of the npm
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Cons
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- It may be better to use an API with much rate limits and resources
+- There can be errors while searching due to GitHub API rate limits

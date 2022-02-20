@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import Pagination from './components/Pagination';
+import CustomPagination from './components/CustomPagination';
 import SearchBox from  './components/SearchBox';
 import CardList from './components/CardList';
 import { fetchRepositories } from './service/api';
 
-const ITEM_PER_PAGE = 30;
+const ITEM_PER_PAGE = 30; // Number of items to show on each page
+const ITEM_LIMIT = 1000; // The limit defined by the GitHub API
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,26 +19,37 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [items, setItems] = useState([]);
 
+  const scrollToTop = () => window.scrollTo({top: 0});
+
   useEffect(() => {
-    const fetch = async () => {
-      try {
+    const fetch = () => {
         setLoading(true);
-        const response = await fetchRepositories(repoName, currentPage, ITEM_PER_PAGE);
-        if(response.status === 200) {
-          const { total_count, items } = response.data;
-          setPageLimit(Math.ceil(total_count / ITEM_PER_PAGE));
-          setItems(items);
-          setMessage(`${total_count} results found`);
-          setLoading(false);
-        } else {
+        fetchRepositories(repoName, currentPage, ITEM_PER_PAGE)
+        .then((response) => {
+          if(response.status === 200) {
+            const { total_count, items } = response.data;
+  
+            const pageCount = Math.ceil(total_count / ITEM_PER_PAGE); // Page count in total
+            const pageLimit = Math.ceil(ITEM_LIMIT / ITEM_PER_PAGE); // the page limit for the API
+            setPageLimit(Math.min(pageCount, pageLimit));
+  
+            setItems(items);
+            setMessage(`${total_count} results found`);
+            setLoading(false);
+            
+          } else {
+            console.log(`Response status ${response.status}`);
+            setError('Something went wrong! Try again');
+            setLoading(false);
+          }
+          scrollToTop();
+        })
+        .catch((error) => {
+          console.log(error.message);
           setError('Something went wrong! Try again');
           setLoading(false);
-        }
-      } catch (error) {
-        console.log(error.message);
-        setError('Something went wrong! Try again');
-        setLoading(false);
-      }
+          scrollToTop();
+        });
     };
 
     if(repoName && currentPage) {
@@ -54,7 +66,7 @@ const App = () => {
 
   const goToPreviousPage = useCallback(() => {
     if(currentPage > 1) {
-      setCurrentPage(currentPage - 1)
+      setCurrentPage(currentPage - 1);
     }
   }, [currentPage]);
 
@@ -84,7 +96,7 @@ const App = () => {
       {!loading && !error && items && items.length > 0 &&
         <>
           <CardList items={items}/>
-          <Pagination
+          <CustomPagination
             containerStyle={styles.pagination}
             currentPage={currentPage}
             pageRange={5}
